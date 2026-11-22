@@ -1,0 +1,1515 @@
+:root {
+  /* olive-ops theme, matched to the reference UI's extracted palette:
+     light green-white top bar, dark olive-black ink, olive-tan main
+     area, light gray control bar */
+  --bg: #f5ffe6; /* light green-white (reference top bar) */
+  --panel: #f8f9f3; /* panel white-green */
+  --panel-edge: #11190a; /* dark olive-black */
+  --text: #11190a;
+  --muted: #5a5f4a; /* olive-gray — dark enough for the light control bar */
+  --accent: #11190a;
+  --accent-soft: rgba(17, 25, 10, 0.08); /* olive tint */
+  --ink: #11190a; /* dark olive-black — reference logo/border colour */
+  --pencil: #d9ddc8; /* light olive-gray track */
+  --olive: #a89c46; /* olive-tan main accent */
+  --olive-soft: #e0e4cc; /* pale olive wash */
+  --bar: #e0e0e0; /* light gray control bar (reference bottom bar) */
+  --green-deep: #0f6b33; /* dark forest green — green TEXT on light surfaces (passes 4.5:1) */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  overflow: hidden;
+}
+
+.app {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- top bar ---------- */
+
+.topbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 20px;
+  background: var(--bg);
+  border-bottom: 2px solid var(--ink);
+}
+
+.topbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.topbar-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* circular icon buttons (?, ⚙) in the top-right corner — reference style */
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #1d4f2b;
+  background: #ffffff;
+  color: #1d4f2b;
+  font-size: 15px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(29, 79, 43, 0.08);
+  transition: background 0.2s, color 0.2s, transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+}
+
+.icon-btn:hover {
+  background: #a8d861;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(29, 79, 43, 0.28);
+}
+
+.icon-btn:active {
+  transform: translateY(0) scale(0.94);
+  transition-duration: 0.05s;
+}
+
+.icon-btn.active {
+  background: #1d4f2b;
+  color: #ffffff;
+}
+
+/* click-catcher behind the settings popover — closes it on outside click */
+.gear-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 38;
+}
+
+/* ⚙ quick-settings popover */
+.gear-pop {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 39;
+  min-width: 240px;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(17, 25, 10, 0.2);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: gear-in 0.18s ease;
+}
+
+@keyframes gear-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.gear-pop-title {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+  margin: 0 0 2px 6px;
+}
+
+.gear-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 7px 8px;
+  border-radius: 7px;
+  text-align: left;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.gear-row:hover {
+  background: var(--accent-soft);
+}
+
+.gear-row:active {
+  transform: scale(0.98);
+}
+
+.gear-row-box {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 2px solid #1d4f2b;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.gear-row.on .gear-row-box {
+  background: #1d4f2b;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  font-size: 26px;
+  color: var(--ink); /* dark olive-black — matches the reference logo */
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.brand h1 {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.brand p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* the metrics grid — 8 stat cards in a row, then 2 smaller cards (dead,
+   zones) side by side below, matching the reference layout */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(74px, 1fr));
+  gap: 8px;
+}
+
+.stat {
+  background: #ffffff;
+  border: 1px solid var(--pencil);
+  border-radius: 10px;
+  padding: 7px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  box-shadow: 0 1px 2px rgba(17, 25, 10, 0.05);
+  transition: background 0.2s, transform 0.15s;
+}
+
+.stat:hover {
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+.stat-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.stat-value {
+  font-size: 16px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.stat-label {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+/* status tones — at-a-glance color coding for the metric cards */
+.stat.tone-good .stat-icon,
+.stat.tone-good .stat-value {
+  color: var(--green-deep); /* positive metric → green */
+}
+
+.stat.tone-bad .stat-icon,
+.stat.tone-bad .stat-value {
+  color: #b91c1c; /* negative metric → subdued red */
+}
+
+/* the two compact cards below the main row — side by side */
+.stat.small {
+  grid-column: span 4;
+  flex-direction: row;
+  justify-content: center;
+  gap: 8px;
+}
+
+.stat.small .stat-value {
+  font-size: 15px;
+}
+
+/* ---------- responsive: narrow windows ---------- */
+
+@media (max-width: 760px) {
+  .brand p {
+    display: none;
+  }
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .stat.small {
+    grid-column: span 2;
+  }
+  .stat-value {
+    font-size: 13px;
+  }
+  .stat-label {
+    font-size: 9px;
+  }
+  .hint {
+    display: none;
+  }
+  input[type='range'] {
+    width: 110px;
+  }
+  .slider-label {
+    display: none;
+  }
+}
+
+/* ---------- stage / canvas ---------- */
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.stage canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/* ---------- control bar ---------- */
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 22px;
+  background: var(--bar); /* light gray — reference bottom bar */
+  border-top: 2px solid var(--ink);
+}
+
+/* row 1: play + sliders + auto-demo — the bottom control bar */
+.controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+
+/* row 2: the pill toolbar — reset, tasks, survivor, kill, drop, sensors, links */
+.toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between; /* toggles left, map actions right */
+  gap: 10px 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--pencil);
+}
+
+/* the left (secondary toggles) and right (primary actions) groups */
+.toolbar-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.play-btn {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  border: 2px solid #1d4f2b;
+  background: #1d4f2b; /* dark green — reference control bar */
+  color: #ffffff; /* white pause/play icon */
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(29, 79, 43, 0.35);
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.play-btn:hover {
+  transform: scale(1.07);
+  background: #275f38;
+  box-shadow: 0 4px 14px rgba(29, 79, 43, 0.45);
+}
+
+.play-btn:active {
+  transform: scale(0.92);
+  box-shadow: 0 1px 4px rgba(29, 79, 43, 0.3);
+  transition-duration: 0.05s;
+}
+
+/* while the sim is running, the play/pause button breathes a soft green glow */
+.play-btn.is-playing {
+  animation: play-glow 2.4s ease-out infinite;
+}
+
+@keyframes play-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 9px rgba(22, 163, 74, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+  }
+}
+
+.slider-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.slider-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 150px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--ink) var(--fill, 50%), var(--olive-soft) var(--fill, 50%));
+  box-shadow: inset 0 0 0 1px rgba(17, 25, 10, 0.3); /* hairline keeps the empty track visible on the gray bar */
+  outline: none;
+  cursor: pointer;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px var(--ink);
+  transition: transform 0.15s;
+}
+
+input[type='range']::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+input[type='range']:active::-webkit-slider-thumb,
+input[type='range']::-webkit-slider-thumb:active {
+  transform: scale(1.35);
+  box-shadow: 0 0 0 5px rgba(17, 25, 10, 0.14);
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 2px solid #ffffff;
+  cursor: pointer;
+}
+
+.slider-value {
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  min-width: 44px;
+  text-align: center;
+}
+
+.ghost-btn {
+  position: relative;
+  overflow: hidden;
+  flex: none;
+  background: #ffffff;
+  border: 2px solid #1d4f2b; /* dark green — matches the play button */
+  color: #1d4f2b;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 999px; /* pill — reference toolbar buttons */
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(29, 79, 43, 0.08);
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+}
+
+/* a light sweep that races across the button on hover — like a felt-tip shine */
+.ghost-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 45%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transform: translateX(-160%) skewX(-20deg);
+  pointer-events: none;
+}
+
+.ghost-btn:hover:not(:disabled) {
+  background: #a8d861; /* light green — same family as Auto-demo */
+  color: #1d4f2b;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(29, 79, 43, 0.28);
+}
+
+.ghost-btn:hover:not(:disabled)::after {
+  animation: shine-sweep 0.55s ease;
+}
+
+.ghost-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.97);
+  box-shadow: 0 1px 4px rgba(29, 79, 43, 0.22);
+  transition-duration: 0.05s;
+}
+
+.ghost-btn.active {
+  background: #1d4f2b; /* solid dark green when toggled on */
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(29, 79, 43, 0.38);
+}
+
+/* reference-style colored identities for the secondary (ghost) toolbar icons */
+.ghost-btn.danger {
+  color: #c81e3a; /* Kill — red */
+}
+
+.ghost-btn.warn {
+  color: #b45309; /* Drop 30% — orange */
+}
+
+.ghost-btn.info {
+  color: #0369a1; /* Sensors — blue */
+}
+
+/* Formation toggles (▽ V / ◉ Swarm) — deep teal so they read as a flight
+   mode rather than a map action, and solid when armed */
+.ghost-btn.formation {
+  color: #0f766e;
+}
+
+.ghost-btn.formation.active {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(15, 118, 110, 0.35);
+}
+
+.ghost-btn.formation.active:hover:not(:disabled) {
+  background: #115e59;
+  border-color: #115e59;
+  color: #ffffff;
+}
+
+/* a thin divider separating the flight-mode toggles from the radio toggles */
+.toolbar-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--pencil);
+  margin: 0 2px;
+}
+
+/* primary map actions — filled pills so they stand out from the ghost toggles */
+.ghost-btn.solid {
+  background: #1d4f2b;
+  border-color: #1d4f2b;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(29, 79, 43, 0.3);
+}
+
+.ghost-btn.solid:hover:not(:disabled) {
+  background: #275f38;
+  border-color: #275f38;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(29, 79, 43, 0.4);
+}
+
+/* Survivor — filled rescue crimson (the swarm's rescue identity) */
+.ghost-btn.solid.survivor {
+  background: #ff1744;
+  border-color: #ff1744;
+  box-shadow: 0 2px 6px rgba(255, 23, 68, 0.32);
+}
+
+.ghost-btn.solid.survivor:hover:not(:disabled) {
+  background: #ff2d58;
+  border-color: #ff2d58;
+  box-shadow: 0 4px 12px rgba(255, 23, 68, 0.42);
+}
+
+/* Clear — filled ink (neutral utility) */
+.ghost-btn.solid.clear {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.ghost-btn.solid.clear:hover:not(:disabled) {
+  background: #232d17;
+  border-color: #232d17;
+}
+
+/* Kill — filled red (fault injection, destructive) */
+.ghost-btn.solid.danger {
+  background: #dc2626;
+  border-color: #dc2626;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.32);
+}
+
+.ghost-btn.solid.danger:hover:not(:disabled) {
+  background: #b91c1c;
+  border-color: #b91c1c;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+}
+
+@keyframes shine-sweep {
+  from {
+    transform: translateX(-160%) skewX(-20deg);
+  }
+  to {
+    transform: translateX(320%) skewX(-20deg);
+  }
+}
+
+/* ---------- scenario banner + auto-demo ---------- */
+
+.scenario-banner {
+  position: absolute;
+  /* top-right corner (below the tiny "≈ 5 km" pill) — keeps the center of
+     the map clear so the narrative toast never hides the active drones */
+  top: 26px;
+  right: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px 12px;
+  max-width: min(460px, 92%);
+  padding: 10px 16px;
+  border-radius: 4px;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+  animation: banner-in 0.35s ease;
+  z-index: 5;
+}
+
+@keyframes banner-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.scenario-badge {
+  flex: none;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #ffffff;
+  background: var(--ink);
+  padding: 3px 9px;
+  border-radius: 2px;
+}
+
+.scenario-text {
+  min-width: 0;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.35;
+  text-align: center;
+}
+
+.scenario-progress {
+  flex: none;
+  width: 90px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--pencil);
+  overflow: hidden;
+}
+
+.scenario-progress-fill {
+  display: block;
+  height: 100%;
+  background: var(--olive);
+  transition: width 0.4s ease;
+}
+
+/* ▶ Auto-demo — THE primary call-to-action: the biggest, most saturated
+   button in the bar so the one-click demo dominates every other control.
+   Light-green fill with a dark-green play triangle (reference identity),
+   but sized up and deepened so it outranks the solid map-action buttons.
+   Active (running) flips to dark green with a white ◼ Stop label. */
+.scenario-btn {
+  border-color: #1d4f2b;
+  background: #9cd84f; /* deeper light green — clearly filled, not washed out */
+  color: #1d4f2b; /* dark green triangle + label */
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  padding: 10px 24px;
+  box-shadow: 0 3px 10px rgba(29, 79, 43, 0.35);
+}
+
+.scenario-btn:hover:not(:disabled) {
+  background: #b3e56a;
+  border-color: #1d4f2b;
+  color: #1d4f2b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(29, 79, 43, 0.45);
+}
+
+.scenario-btn.active {
+  border-color: #1d4f2b;
+  background: #1d4f2b;
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(29, 79, 43, 0.25), 0 4px 12px rgba(29, 79, 43, 0.35);
+}
+
+/* every interactive element gets a visible keyboard-focus ring */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #16a34a;
+  outline-offset: 2px;
+}
+
+.hint {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--muted);
+  max-width: 340px;
+  text-align: right;
+  line-height: 1.4;
+}
+
+/* ---------- launch sequence: locked controls until Release ---------- */
+
+/* every mission control is inert while the swarm is still in the pen */
+.ghost-btn:disabled,
+.play-btn:disabled,
+input[type='range']:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
+}
+
+/* the Agents slider is the ONE control that works before release —
+   it loads the drones into the pen. Highlight it so it's obvious. */
+.slider-group.live .slider-label {
+  color: var(--green-deep);
+  font-weight: 700;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* the hover zone covering the holding pen — reveals the Release button */
+.pen-overlay {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  z-index: 4;
+}
+
+.release-btn {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: #16a34a;
+  border: 2px solid #16a34a;
+  border-radius: 2px;
+  padding: 10px 24px;
+  cursor: pointer;
+  /* hidden until hover — visibility (not just opacity) removes the button
+     from the tab order and a11y tree while it's invisible */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s, border-color 0.2s, visibility 0s linear 0.2s;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.pen-overlay:hover .release-btn {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s, border-color 0.2s, visibility 0s linear 0s;
+}
+
+.release-btn:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 0 6px 18px rgba(17, 25, 10, 0.42);
+}
+
+.release-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(17, 25, 10, 0.32);
+}
+
+/* while visible, the Release button pulses to draw the eye */
+.pen-overlay:hover .release-btn {
+  animation: release-pulse 2s ease-in-out infinite;
+}
+
+@keyframes release-pulse {
+  0%,
+  100% {
+    box-shadow: 0 2px 12px rgba(22, 163, 74, 0.35);
+  }
+  50% {
+    box-shadow: 0 8px 24px rgba(22, 163, 74, 0.6);
+  }
+}
+
+/* pre-release guidance notes on the stage */
+.stage-note {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: min(540px, 92%);
+  padding: 10px 18px;
+  border-radius: 4px;
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+  z-index: 3;
+}
+
+.stage-note strong {
+  color: var(--green-deep);
+}
+
+/* ---------- kill dialog: ask how many drones to fail ---------- */
+
+.kill-modal {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.12);
+  z-index: 20;
+}
+
+.kill-box {
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+  padding: 22px 26px;
+  width: min(320px, 92%);
+  animation: banner-in 0.2s ease;
+}
+
+.kill-box h2 {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  margin-bottom: 6px;
+}
+
+/* the ? about dialog — a full-screen overlay like the kill dialog */
+.help-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: rgba(17, 25, 10, 0.45);
+  padding: 20px;
+}
+
+.help-box {
+  background: var(--panel);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(17, 25, 10, 0.35);
+  padding: 20px 22px;
+  width: min(480px, 94%);
+  animation: gear-in 0.2s ease;
+}
+
+.help-box h2 {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  margin-bottom: 10px;
+}
+
+.help-box ul {
+  margin: 0 0 16px;
+  padding-left: 18px;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--text);
+}
+
+.help-box li + li {
+  margin-top: 6px;
+}
+
+.help-box strong {
+  color: var(--ink);
+}
+
+.help-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.kill-hint {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+
+.kill-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+/* plain number field, spinners hidden, notebook sharp corners */
+.kill-row input[type='number'] {
+  width: 90px;
+  padding: 8px 10px;
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  outline: none;
+}
+
+.kill-row input[type='number']:focus {
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.35);
+}
+
+.kill-row input[type='number']::-webkit-outer-spin-button,
+.kill-row input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.kill-row input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.kill-of {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.kill-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.kill-btn {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  background: #dc2626;
+  border: 2px solid #dc2626;
+  border-radius: 2px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.kill-btn:hover:not(:disabled) {
+  background: #b91c1c;
+  border-color: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(220, 38, 38, 0.35);
+}
+
+.kill-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.97);
+  box-shadow: 0 1px 4px rgba(220, 38, 38, 0.3);
+  transition-duration: 0.05s;
+}
+
+.kill-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ---------- main view tabs: 🗺 Map | ⬢ Drone info ---------- */
+
+.view-tabs {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: var(--bg);
+  border-bottom: 2px solid var(--ink);
+}
+
+.view-tab {
+  position: relative;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: #e4e6d9; /* light gray pill — reference tab style */
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 7px 18px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+}
+
+.view-tab:hover {
+  color: #1d4f2b;
+  background: #a8d861; /* light green — same hover language as the toolbar buttons */
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(29, 79, 43, 0.2);
+}
+
+.view-tab:active {
+  transform: translateY(0);
+  transition-duration: 0.05s;
+}
+
+.view-tab.active {
+  color: var(--ink);
+  background: #ffffff; /* selected = white pill with black text */
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(17, 25, 10, 0.14);
+}
+
+/* the content area below the tabs — the map canvas or the fleet view */
+.stage-body {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  background: var(--panel);
+}
+
+/* ---------- ⬢ Drone info view (the fleet table) ---------- */
+
+.drone-view {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  background: var(--panel);
+  overflow-y: auto;
+  /* no top padding here: the sticky table header must sit flush at the top
+     edge when scrolled, with no strip above it for rows to peek through */
+  padding: 0 22px 26px;
+}
+
+.drone-view-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 18px; /* the visual gap that used to be container padding */
+  margin-bottom: 14px;
+}
+
+.drone-view-head h2 {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.drone-view-summary {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.drone-view-summary .alive {
+  color: var(--green-deep);
+}
+
+.drone-view-summary .lost {
+  color: #b91c1c;
+}
+
+.drone-view-summary .jammed-sum {
+  color: #b45309;
+}
+
+.drone-empty {
+  padding: 40px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.drone-table {
+  width: 100%;
+  /* separate (not collapse): lets the header row stick without the
+     collapsed-border model detaching the header's border while scrolled */
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 2px solid var(--ink);
+  font-size: 12.5px;
+  margin-bottom: 18px;
+}
+
+.drone-table th {
+  position: sticky;
+  top: 0;
+  z-index: 2; /* stay above rows scrolling underneath */
+  text-align: left;
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--muted);
+  background: #e7e9dd; /* opaque — rows scrolling under the fixed header don't bleed through */
+  border-bottom: 2px solid var(--ink);
+  padding: 7px 10px;
+  white-space: nowrap;
+}
+
+.drone-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--pencil);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.drone-table tbody tr {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.drone-table tbody tr:hover {
+  background: var(--accent-soft);
+}
+
+.drone-table tbody tr.selected {
+  background: #dcf2c0; /* light green fill — the inspected drone pops at a glance */
+  box-shadow: inset 3px 0 0 #1d4f2b; /* dark-green side rail anchors the selection */
+}
+
+.drone-table tbody tr.selected:hover {
+  background: #dcf2c0; /* stay green even while hovering — selection outranks hover */
+}
+
+.drone-table tbody tr.crashed {
+  opacity: 0.55;
+}
+
+.drone-name {
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.drone-table tbody tr.crashed .drone-name {
+  color: #b91c1c; /* subdued red for the negative state */
+}
+
+.drone-bat {
+  font-weight: 700;
+  color: var(--green-deep);
+}
+
+.drone-bat.low {
+  color: #b91c1c;
+}
+
+/* the area-discovery % in the fleet table — mini progress bar + number */
+.disc-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.disc-track {
+  width: 44px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--pencil);
+  overflow: hidden;
+}
+
+.disc-fill {
+  display: block;
+  height: 100%;
+  background: #16a34a;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* discovery row in the detail card — mirrors the battery bar */
+.drone-disc {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drone-disc-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  min-width: 108px;
+}
+
+/* ---------- ⧉ Tasks & Survivors view (the mission board) ---------- */
+
+.mission-view .drone-view-summary .task-sum {
+  color: #b45309;
+}
+
+.mission-view .drone-view-summary .rescued-sum {
+  color: var(--green-deep); /* rescued = positive → green */
+}
+
+.mission-view .drone-view-summary .done-sum {
+  color: var(--green-deep); /* tasks done = positive → green */
+}
+
+/* an unclaimed survivor row needs attention — it's waiting for a rescuer */
+.mission-view .drone-table tbody tr.attention {
+  background: rgba(255, 23, 68, 0.07);
+}
+
+.drone-status.found {
+  color: #ffffff;
+  background: #ff1744;
+  border-color: #ff1744;
+}
+
+.drone-status.unlocated {
+  color: #ffffff;
+  background: var(--muted);
+  border-color: var(--muted);
+}
+
+.drone-status.rescuing {
+  color: #ffffff;
+  background: #ff1744;
+  border-color: #ff1744;
+}
+
+.drone-status.open {
+  color: #ffffff;
+  background: #b45309;
+  border-color: #b45309;
+}
+
+.mission-log-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin: 4px 0 10px;
+}
+
+.mission-log {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.mission-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border: 1px solid var(--pencil);
+  border-radius: 2px;
+  background: var(--panel);
+  font-size: 12.5px;
+}
+
+.mission-entry.rescue {
+  border-left: 3px solid var(--green-deep); /* rescue = positive → green */
+}
+
+.mission-entry.task {
+  border-left: 3px solid #fbbf24;
+}
+
+.mission-entry-icon {
+  flex: none;
+  font-weight: 800;
+  color: #ffffff;
+  background: var(--ink);
+  border-radius: 2px;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+}
+
+.mission-entry.rescue .mission-entry-icon {
+  background: var(--green-deep);
+}
+
+.mission-entry.task .mission-entry-icon {
+  background: #fbbf24;
+  color: #111111;
+}
+
+.mission-entry-main {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.mission-entry-time {
+  flex: none;
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.drone-loc {
+  color: var(--muted);
+}
+
+/* the detail card under the table (the 6 requirements + no-comms duty) */
+.drone-detail {
+  padding: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.drone-detail-empty {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  font-size: 12.5px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.drone-detail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.drone-detail-head h3 {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.drone-status {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1.5px solid;
+  color: #ffffff; /* solid status chips — white text on the fill */
+}
+
+.drone-status.ok {
+  background: var(--green-deep); /* active — green fill (5.2:1 with white) */
+  border-color: var(--green-deep);
+}
+
+.drone-status.jammed {
+  background: #b45309; /* no-comms / claimed — amber fill (5.0:1) */
+  border-color: #b45309;
+}
+
+.drone-status.dead {
+  background: #b91c1c; /* crashed — red fill (6.6:1) */
+  border-color: #b91c1c;
+}
+
+.drone-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.drone-fact {
+  display: grid;
+  grid-template-columns: 18px 96px 1fr;
+  gap: 6px;
+  align-items: baseline;
+  padding: 5px 8px;
+  background: #ffffff;
+  border: 1px solid var(--pencil);
+  border-radius: 2px;
+}
+
+.drone-fact-n {
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffffff;
+  background: var(--ink);
+  border-radius: 2px;
+  text-align: center;
+  padding: 1px 0;
+}
+
+.drone-fact-k {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+}
+
+.drone-fact-v {
+  font-size: 12px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.drone-comms {
+  border: 1.5px dashed #b45309;
+  border-radius: 2px;
+  padding: 8px 10px;
+  background: rgba(180, 83, 9, 0.06);
+}
+
+.drone-comms h4 {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #b45309;
+  margin-bottom: 3px;
+}
+
+.drone-comms p {
+  font-size: 11.5px;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.drone-battery {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.drone-battery-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+
+.drone-battery-track {
+  flex: 1;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--pencil);
+  overflow: hidden;
+}
+
+.drone-battery-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.drone-battery-value {
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  min-width: 36px;
+  text-align: right;
+}
